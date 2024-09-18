@@ -1,0 +1,95 @@
+<html>
+    <style type = "text/css">
+        canvas {background: red}
+    </style>
+
+    <script type = "text/javascript" src = "webgl-utils.js"></script>
+    <script type = "text/javascript" src = "initShaders.js"></script>
+    <script type = "text/javascript" src = "gradientVertical.js"></script>
+
+    <script id="vertex-shader" type = "x-shader/x-vertex">
+        attribute vec4 vPos;
+        void main() {
+            gl_Position = vPos;
+        }
+    </script>
+
+    <script id="fragment-shader" type="x-shader/x-fragment">
+        precision mediump float;
+        uniform vec4 u_color;
+
+        void main() {
+            gl_FragColor = u_color;
+        }
+    </script>
+
+    <script type = "text/javascript">
+        var canvas;
+        var gl;
+
+        window.onload = init;
+
+        //Initializing canvas with width/height defined in body + painting background
+        function init() {
+            canvas = document.getElementById("gl-canvas");
+            gl = WebGLUtils.setupWebGL(canvas);
+
+            if(!gl) {
+                alert("WebGL is not available :(");
+            }
+
+            gl.viewport(0,0, canvas.width, canvas.height);
+
+            /* Deciding to use a color palette:
+                p. 263 of Color Index for brown/yellow/blue
+                OR
+                p. 291 of Color Index for a purple/blue/pink
+                0.89, 0.73, .45 is a golden color from page 291
+            */
+            gl.clearColor(0.89, 0.73, .45, 1.0); //228,188,116 in 256 scale
+            gl.clear(gl.COLOR_BUFFER_BIT);
+
+            var program = initShaders(gl, "vertex-shader", "fragment-shader");
+            gl.useProgram(program);
+
+            var vPos = gl.getAttribLocation(program, "vPos");
+            var colorUniformLocation = gl.getUniformLocation(program, "u_color");
+            var buffer = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+            
+
+            //Hard work is done. Now, let's start with the sunset!
+            var vertices = gradientVertical(parseFloat(-1.00), parseFloat(1.00), -0.75, 0.75, 5);
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+
+            gl.useProgram(program);
+            gl.enableVertexAttribArray(vPos);
+            gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0, 0);
+
+            /*Now, we get to actually draw stuff.
+            Don't forget to put new vertices in the array.
+            !!They will not show up as an error!! They will just not show up!!
+            */
+            //We're starting with a gradient, going from gold to a dark purple.
+
+            
+
+            gl.uniform4f(colorUniformLocation, 0.74, 0.59, 0.4, 1.0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
+
+            //gl.uniform4f(colorUniformLocation, 0.56, 0.52, 0.45, 1.0);
+            //gl.drawArrays(gl.TRIANGLE_FAN, 7, 13);
+
+            //gl.uniform4f(colorUniformLocation, 0.27, 0.27, 0.25, 1.0);
+            //gl.drawArrays(gl.TRIANGLE_FAN, 13, );
+
+        }
+    </script>
+
+    <body>
+        <canvas id = "gl-canvas" width = "512" height = "512">
+            Oopsy!
+        </canvas>
+    </body>
+</html>
