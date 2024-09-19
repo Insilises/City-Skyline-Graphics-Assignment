@@ -1,18 +1,18 @@
 //Use to build a vertical gradient where TRIANGLE_FAN is used to draw rectangles.
 //Returns an array of vertices to use
 function verticalGradient(minX, maxX, minY, maxY, numberOfColors) {
-            if (minY < 0)
-                var YDiff = maxY + minY;
+    var YDiff;
+    var XDiff;
+    //The reason the averagePieceSize is wrong is something here; No clue what.
+            if (minY == 0)
+                YDiff = maxY + minY;
             else
-                var YDiff = maxY - minY;
-            if (minX < 0)
-                var XDiff = maxX + minX;
+                YDiff = maxY - minY;
+            if (minX == 0)
+                XDiff = maxX + minX;
             else
-                var XDiff = maxX - minX;
-
+                XDiff = maxX - minX;
         var centerOfGradientX = XDiff/2;
-        if (YDiff == 0)
-            YDiff = maxY;
         var averagePieceSize = YDiff/numberOfColors;
 
         var topYVertex = minY + averagePieceSize;
