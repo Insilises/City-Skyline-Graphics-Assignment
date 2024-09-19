@@ -5,7 +5,7 @@
 
     <script type = "text/javascript" src = "webgl-utils.js"></script>
     <script type = "text/javascript" src = "initShaders.js"></script>
-    <script type = "text/javascript" src = "gradientVertical.js"></script>
+    <script type = "text/javascript" src = "verticalGradient.js"></script>
 
     <script id="vertex-shader" type = "x-shader/x-vertex">
         attribute vec4 vPos;
@@ -40,12 +40,6 @@
 
             gl.viewport(0,0, canvas.width, canvas.height);
 
-            /* Deciding to use a color palette:
-                p. 263 of Color Index for brown/yellow/blue
-                OR
-                p. 291 of Color Index for a purple/blue/pink
-                0.89, 0.73, .45 is a golden color from page 291
-            */
             gl.clearColor(0.89, 0.73, .45, 1.0); //228,188,116 in 256 scale
             gl.clear(gl.COLOR_BUFFER_BIT);
 
@@ -59,7 +53,11 @@
             
 
             //Hard work is done. Now, let's start with the sunset!
-            var vertices = gradientVertical(parseFloat(-1.00), parseFloat(1.00), -0.75, 0.75, 5);
+
+            /*Don't forget minY is NOT the bottom of the canvas since we have a background color.
+            Also don't forget to change the last value when adding new colors since calculations 
+            are based on it*/
+            var vertices = verticalGradient(-1.00, 1.00, -0.8, 0.8, 4);
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
@@ -71,19 +69,24 @@
             Don't forget to put new vertices in the array.
             !!They will not show up as an error!! They will just not show up!!
             */
-            //We're starting with a gradient, going from gold to a dark purple.
+            //We're starting with a gradient, going from gold to dark blue to purple.
 
-            
+            /*TODO: Put all colors in one array like Dr. Brown did for T3HouseFinal
+            I just like how it's organized, and it would save some trouble. Could write
+            a loop super easy (like he did), and since each of these triangles are 4 vertices...
+            */
 
-            gl.uniform4f(colorUniformLocation, 0.74, 0.59, 0.4, 1.0);
-            gl.drawArrays(gl.TRIANGLE_FAN, 0, 6);
+            gl.uniform4f(colorUniformLocation, 0.8, 0.59, 0.4, 1.0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
 
-            //gl.uniform4f(colorUniformLocation, 0.56, 0.52, 0.45, 1.0);
-            //gl.drawArrays(gl.TRIANGLE_FAN, 7, 13);
+            gl.uniform4f(colorUniformLocation, 0.56, 0.52, 0.5, 1.0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
 
-            //gl.uniform4f(colorUniformLocation, 0.27, 0.27, 0.25, 1.0);
-            //gl.drawArrays(gl.TRIANGLE_FAN, 13, );
+            gl.uniform4f(colorUniformLocation, 0.27, 0.27, 0.3, 1.0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 8, 4);
 
+            gl.uniform4f(colorUniformLocation, 0.13, 0.24, 0.29, 1.0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 12, 4);
         }
     </script>
 
