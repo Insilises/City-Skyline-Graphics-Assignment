@@ -1,3 +1,10 @@
+<!-- 
+Alexis Brunner
+Cosc 4345, Section 01
+9/14/24
+Creates a graphic for a city skyline with a graph over the skyline. Uses a
+golden, blue, and purple color scheme. 
+-->
 <html>
     <style type = "text/css">
         canvas {background: red}
@@ -6,6 +13,7 @@
     <script type = "text/javascript" src = "webgl-utils.js"></script>
     <script type = "text/javascript" src = "initShaders.js"></script>
     <script type = "text/javascript" src = "verticalGradient.js"></script>
+    <script type = "text/javascript" src = "drawSkylines.js"></script>
 
     <script id="vertex-shader" type = "x-shader/x-vertex">
         attribute vec4 vPos;
@@ -69,19 +77,29 @@
                 [0.56, 0.52, 0.5, 1.0],
                 [0.27, 0.27, 0.3, 1.0],
                 [0.13, 0.24, 0.29, 1.0],
-                [0.04, 0.1, 0.07, 1.0]
+                [0.2, 0.1, 0.25, 1.0]
             ];
             //TODO: Add more colors and change value in verticalGradient() accordingly
-
+            
+            //Drawing the gradient
             for (i = 0; i < colors.length; i++) {
                 gl.uniform4f(colorUniformLocation, colors[i][0], colors[i][1], colors[i][2], 1);
                 gl.drawArrays(gl.TRIANGLE_FAN, i * 4, 4);
             }
+            
+
+            //Now for the buildings
+            var skylineVertices = drawBackSkyline();
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skylineVertices), gl.STATIC_DRAW);
+
+            gl.uniform4f(colorUniformLocation, 0.4, 0.27, 0.38, 1.0);
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 13);
+            
         }
     </script>
 
     <body>
-        <canvas id = "gl-canvas" width = "512" height = "512">
+        <canvas id = "gl-canvas" width = "1028" height = "512">
             Oopsy!
         </canvas>
     </body>
