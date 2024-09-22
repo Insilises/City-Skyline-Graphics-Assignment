@@ -3,7 +3,7 @@ Alexis Brunner
 Cosc 4345, Section 01
 9/14/24
 Creates a graphic for a city skyline with a graph over the skyline. Uses a
-golden, blue, and purple color scheme. 
+golden, grey, blue, and purple color scheme. 
 -->
 <html>
     <style type = "text/css">
@@ -72,12 +72,16 @@ golden, blue, and purple color scheme.
             //We're starting with a gradient, going from gold to dark blue to purple.
             
             var colors = [
+                //vertical gradient colors
                 [0.89, 0.73, .45, 1.0],
                 [0.8, 0.59, 0.4, 1.0],
                 [0.56, 0.52, 0.5, 1.0],
                 [0.27, 0.27, 0.3, 1.0],
                 [0.13, 0.24, 0.29, 1.0],
-                [0.2, 0.1, 0.25, 1.0]
+                [0.2, 0.1, 0.25, 1.0],
+
+                //Beginning backgroundSkyline colors
+                [0.4, 0.27, 0.38, 1.0]
             ];
             //TODO: Add more colors and change value in verticalGradient() accordingly
             
@@ -89,12 +93,33 @@ golden, blue, and purple color scheme.
             
 
             //Now for the buildings
-            var skylineVertices = drawBackSkyline();
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(skylineVertices), gl.STATIC_DRAW);
+            /*TODO: Would it be hard to add shading and make the objects seem 3D?
+            Could we pick a slightly darker color, and since we know how the shape is
+            drawn (via the vertices array), could we do checks to see if that area would
+            be further away from the sun in the back? Then, we just create a new shape over
+            the existing shape?
 
-            gl.uniform4f(colorUniformLocation, 0.4, 0.27, 0.38, 1.0);
-            gl.drawArrays(gl.TRIANGLE_FAN, 0, 13);
+            Obviously, I could since these shapes are predetermined, but I'm trying to think
+            of a modular way to do this for practice.
+            */
             
+            
+            var backgroundSkyline = drawSkylineBase(-0.5);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            //TODO: Fix tiltedRoofTower code; backgroundSkylineBase works perfectly.
+            //drawTiltedRoofTower(minX, maxX, Y1, Y2, MinY)
+            var tiltedTower = drawTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tiltedTower), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+
+            tiltedTower = tiltedTower.concat(drawTiltedTower(-0.85, -0.5, -0.1, 0.2, -0.7));
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tiltedTower), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
+            gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
         }
     </script>
 

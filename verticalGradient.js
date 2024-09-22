@@ -1,12 +1,13 @@
-/**Use to build a vertical gradient where TRIANGLE_FAN is used to draw rectangles.
- * Returns an array of vertices to use
+/**Use to build a vertical gradient where TRIANGLE_FAN is used to
+ * draw a series of rectangles. Returns an array of gradientVertices to use
  * 
  * @param {*} minX X value where the gradient should start
  * @param {*} maxX X value where the gradient should end
  * @param {*} minY Y value where the gradient should start
  * @param {*} maxY Y value where the gradient should end
  * @param {*} numberOfColors The number of colors the gradient will have
- * @returns {*} vertices The points the gradients should be drawn in via gl.TRIANGLE_FAN
+ * @returns {*} gradientVertices The points the gradients should be drawn
+ *  in via gl.TRIANGLE_FAN
  */
 function verticalGradient(minX, maxX, minY, maxY, numberOfColors) {
     var YDiff;
@@ -28,7 +29,7 @@ function verticalGradient(minX, maxX, minY, maxY, numberOfColors) {
     /*Creating a base array that we can push values onto later in the loop.
     I REALLY wanted to include this in the loop, but pushing only works if
     it pushes to an existing array that has something in it. */
-    var vertices = [
+    var gradientVertices = [
         minX, minY, //bottom left
         maxX, minY, //bottom right
         maxX, topYVertex, //top right
@@ -39,7 +40,7 @@ function verticalGradient(minX, maxX, minY, maxY, numberOfColors) {
         var bottomYVertex = minY + averagePieceSize * i;
         topYVertex = bottomYVertex + averagePieceSize;
 
-        vertices.push(
+        gradientVertices.push(
             minX, bottomYVertex, //bottom left
             maxX, bottomYVertex, //bottom right
             maxX, topYVertex, //top right
@@ -47,5 +48,5 @@ function verticalGradient(minX, maxX, minY, maxY, numberOfColors) {
         );
     }
 
-    return vertices
+    return gradientVertices
 }
