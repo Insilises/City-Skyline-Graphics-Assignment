@@ -13,7 +13,7 @@ golden, grey, blue, and purple color scheme.
     <script type = "text/javascript" src = "webgl-utils.js"></script>
     <script type = "text/javascript" src = "initShaders.js"></script>
     <script type = "text/javascript" src = "verticalGradient.js"></script>
-    <script type = "text/javascript" src = "drawSkylines.js"></script>
+    <script type = "text/javascript" src = "Skyline.js"></script>
 
     <script id="vertex-shader" type = "x-shader/x-vertex">
         attribute vec4 vPos;
@@ -103,23 +103,25 @@ golden, grey, blue, and purple color scheme.
             of a modular way to do this for practice.
             */
             
-            
-            var backgroundSkyline = drawSkylineBase(-0.5);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
+            /*backgroundSkylineBase has 4 vertices, tiltedTower has 4 vertices each,
+            curvedTower has ___ vertices each
+            */
+            var backgroundSkylineBase = returnVerticesSkylineBase(-0.5);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkylineBase), gl.STATIC_DRAW);
             gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-            //TODO: Fix tiltedRoofTower code; backgroundSkylineBase works perfectly.
-            //drawTiltedRoofTower(minX, maxX, Y1, Y2, MinY)
-            var tiltedTower = drawTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tiltedTower), gl.STATIC_DRAW);
+            var backgroundSkyline = returnVerticesTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(-0.85, -0.5, -0.1, 0.2, -0.7));
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(-0.4, -0.1, -0.7, 0.1));
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
+
             gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
             gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-
-            tiltedTower = tiltedTower.concat(drawTiltedTower(-0.85, -0.5, -0.1, 0.2, -0.7));
-            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tiltedTower), gl.STATIC_DRAW);
-            gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
             gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 8, 35);
+
         }
     </script>
 
