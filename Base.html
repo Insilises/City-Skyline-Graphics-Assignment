@@ -59,8 +59,24 @@ golden, grey, blue, and purple color scheme.
             var buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
+            //We're starting with a gradient, going from gold to dark blue to purple.
+            var gradientColors = [
+                [0.99, 0.94, 0.68, 1.0],
+                [0.91, 0.88, 0.66, 1.0], 
+                [0.91, 0.84, 0.54, 1.0],
+                [0.89, 0.73, .45, 1.0],
+                [0.8, 0.59, 0.4, 1.0],
+                [0.74, 0.58, 0.4, 1.0],
+                [0.56, 0.52, 0.5, 1.0],
+                [0.27, 0.27, 0.3, 1.0],
+                [0.13, 0.24, 0.29, 1.0],
+                [0.2, 0.1, 0.25, 1.0]
+            ];
+            var bgSkylineColors = [0.4, 0.27, 0.38, 1.0];
+            //TODO: Add more colors and change value in verticalGradient() accordingly
+
             //Don't forget to change numberOfColors as colors are added.
-            var vertices = verticalGradient(-1.0, 1.0, -1.0, 1.0, 5);
+            var vertices = verticalGradient(-1.0, 1.0, -1.0, 1.0, 9);
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
@@ -69,46 +85,24 @@ golden, grey, blue, and purple color scheme.
             gl.vertexAttribPointer(vPos, 2, gl.FLOAT, false, 0, 0);
 
             //Now to actually start drawing stuff.
-            //We're starting with a gradient, going from gold to dark blue to purple.
-            
-            var colors = [
-                //vertical gradient colors
-                [0.89, 0.73, .45, 1.0],
-                [0.8, 0.59, 0.4, 1.0],
-                [0.56, 0.52, 0.5, 1.0],
-                [0.27, 0.27, 0.3, 1.0],
-                [0.13, 0.24, 0.29, 1.0],
-                [0.2, 0.1, 0.25, 1.0],
 
-                //Beginning backgroundSkyline colors
-                [0.4, 0.27, 0.38, 1.0]
-            ];
-            //TODO: Add more colors and change value in verticalGradient() accordingly
-            
             //Drawing the gradient
-            for (i = 0; i < colors.length; i++) {
-                gl.uniform4f(colorUniformLocation, colors[i][0], colors[i][1], colors[i][2], 1);
+            for (i = 0; i < gradientColors.length; i++) {
+                gl.uniform4f(colorUniformLocation, gradientColors[i][0], gradientColors[i][1],
+                    gradientColors[i][2], 1);
                 gl.drawArrays(gl.TRIANGLE_FAN, i * 4, 4);
             }
             
 
-            //Now for the buildings
-            /*TODO: Would it be hard to add shading and make the objects seem 3D?
-            Could we pick a slightly darker color, and since we know how the shape is
-            drawn (via the vertices array), could we do checks to see if that area would
-            be further away from the sun in the back? Then, we just create a new shape over
-            the existing shape?
-
-            Obviously, I could since these shapes are predetermined, but I'm trying to think
-            of a modular way to do this for practice.
-            */
+            //Now for the entire back skyline
             
             /*backgroundSkylineBase has 4 vertices, tiltedTower has 4 vertices each,
-            curvedTower has ___ vertices each
+            curvedTower has 35 vertices each
             */
             var backgroundSkylineBase = returnVerticesSkylineBase(-0.5);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkylineBase), gl.STATIC_DRAW);
-            gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
+            gl.uniform4f(colorUniformLocation, bgSkylineColors[0], 
+                bgSkylineColors[1], bgSkylineColors[2], bgSkylineColors[3]);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
             var backgroundSkyline = returnVerticesTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
@@ -117,11 +111,11 @@ golden, grey, blue, and purple color scheme.
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
 
-            gl.uniform4f(colorUniformLocation, colors[6][0], colors[6][1], colors[6][2], colors[6][3]);
+            gl.uniform4f(colorUniformLocation, bgSkylineColors[0], bgSkylineColors[1],
+                bgSkylineColors[2], bgSkylineColors[3]);
             gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 8, 35);
-
         }
     </script>
 
