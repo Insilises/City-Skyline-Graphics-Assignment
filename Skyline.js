@@ -79,3 +79,30 @@ function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
 
     return curvedTower;
 }
+
+/**Returns an array of vertices for a building with a triangular, middle-pointed roof
+ * using triangle fan.
+ * 
+ * @param {*} minX X value the tower should start at
+ * @param {*} maxX X value the tower should end at
+ * @param {*} minY The Y value the skyline base ends and the individual
+ * building starts
+ * @param {*} towerHeight The maximum Y value of the tower
+ */
+function returnVerticesPointedTower(minX, maxX, minY, towerHeight) {
+    var YDiff = towerHeight - minY;
+    var XDiff = maxX - minX;
+    var roofHeight = XDiff/2;
+    var roofStartY = towerHeight - roofHeight;
+
+    var pointedTower = [
+        //Bottom two vertices; Fan starts with bottom left
+        maxX, minY,
+        minX, minY,
+        minX, roofStartY,
+        minX + (XDiff/2), towerHeight,//Top point
+        maxX, roofStartY //Final vertex
+    ];
+
+    return pointedTower;
+}

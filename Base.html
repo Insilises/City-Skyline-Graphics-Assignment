@@ -97,9 +97,9 @@ golden, grey, blue, and purple color scheme.
             //Now for the entire back skyline
             
             /*backgroundSkylineBase has 4 vertices, tiltedTower has 4 vertices each,
-            curvedTower has 35 vertices each
+            curvedTower has 35 vertices each, 
             */
-            var backgroundSkylineBase = returnVerticesSkylineBase(-0.5);
+            var backgroundSkylineBase = returnVerticesSkylineBase(-0.7);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkylineBase), gl.STATIC_DRAW);
             gl.uniform4f(colorUniformLocation, bgSkylineColors[0], 
                 bgSkylineColors[1], bgSkylineColors[2], bgSkylineColors[3]);
@@ -108,6 +108,7 @@ golden, grey, blue, and purple color scheme.
             var backgroundSkyline = returnVerticesTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
             backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(-0.85, -0.5, -0.1, 0.2, -0.7));
             backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(-0.4, -0.1, -0.7, 0.1));
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesPointedTower(0.1, 0.3, -0.7, 0.3));
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
 
@@ -116,6 +117,7 @@ golden, grey, blue, and purple color scheme.
             gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 8, 35);
+            gl.drawArrays(gl.TRIANGLE_FAN, 43, 5);
         }
     </script>
 
