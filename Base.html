@@ -37,7 +37,6 @@ golden, grey, blue, and purple color scheme.
 
         window.onload = init;
 
-        //Initializing canvas with width/height defined in body + painting background
         function init() {
             canvas = document.getElementById("gl-canvas");
             gl = WebGLUtils.setupWebGL(canvas);
@@ -69,17 +68,22 @@ golden, grey, blue, and purple color scheme.
                 [0.74, 0.58, 0.4, 1.0],
                 [0.56, 0.52, 0.5, 1.0],
                 [0.27, 0.27, 0.3, 1.0],
-                [0.13, 0.24, 0.29, 1.0],
-                [0.2, 0.1, 0.25, 1.0]
+                [0.3, 0.2, 0.35, 1.0],
+                [0.2, 0.1, 0.25, 1.0],
+                [0.2, 0.1, 0.3, 1.0]
+                //[0.13, 0.24, 0.29, 1.0]
             ];
+
             var skylineColors = [
+                [0.85, 0.74, 0.44, 1.0],
+                [0.75, 0.64, 0.34, 1.0],
                 [0.63, 0.29, 0.48, 1.0], //Is this too bright?
                 [0.4, 0.27, 0.38, 1.0]
             ];
             //TODO: Add more colors and change value in verticalGradient() accordingly
 
             //Don't forget to change numberOfColors as colors are added.
-            var vertices = verticalGradient(-1.0, 1.0, -1.0, 1.0, 9);
+            var vertices = verticalGradient(-1.0, 1.0, -0.7, 1.0, 10);
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
@@ -98,23 +102,20 @@ golden, grey, blue, and purple color scheme.
             
 
             //Now for the entire back skyline
-            
-            /*backgroundSkylineBase has 4 vertices, tiltedTower has 4 vertices each,
-            curvedTower has 35 vertices each, lines will have 2
-            */
+
             var backgroundSkylineBase = returnVerticesSkylineBase(-0.7);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkylineBase), gl.STATIC_DRAW);
             gl.uniform4f(colorUniformLocation, skylineColors[0][0], 
                 skylineColors[0][1], skylineColors[0][2], skylineColors[0][3]);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-            var backgroundSkyline = returnVerticesTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
-            backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(-0.85, -0.5, -0.1, 0.2, -0.7));
-            backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(-0.4, -0.1, -0.7, 0.1));
-            backgroundSkyline = backgroundSkyline.concat(returnVerticesPointedTower(0.1, 0.3, -0.7, 0.3));
-            backgroundSkyline.push(0.2, 0.3,     0.2 ,0.4); //Needle to be drawn with a line
-            backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(0.4, 0.6, 0.1, -0.2, -0.7));
-            backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(0.7, 1.2, -0.7, 0.2));
+            var backgroundSkyline = returnVerticesTiltedTower(-1.0, -0.9, 0.4, 0.2, -0.7);
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(-0.85, -0.5, 0.1, 0.4, -0.7));
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(-0.4, -0.1, -0.7, 0.3));
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesPointedTower(0.1, 0.3, -0.7, 0.5));
+            backgroundSkyline.push(0.2, 0.5,     0.2 ,0.6); //Needle to be drawn with a line
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(0.4, 0.6, 0.3, 0, -0.7));
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(0.7, 1.2, -0.7, 0.4));
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
 
@@ -131,10 +132,62 @@ golden, grey, blue, and purple color scheme.
 
 
             //Now for the second skyline
-            var secondSkylineBase = returnVerticesSkylineBase(-0.8);
+            var secondSkylineBase = returnVerticesSkylineBase(-0.75);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(secondSkylineBase), gl.STATIC_DRAW);
             gl.uniform4f(colorUniformLocation, skylineColors[1][0], skylineColors[1][1], skylineColors[1][2], skylineColors[1][3]);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            var secondSkyline = returnVerticesTiltedTower(-1.0, -0.8, -0.1, 0.3, -0.75);
+            secondSkyline.push(-0.8, 0.3,   -0.8, 0.4); //Needle on top of first tilted tower
+            secondSkyline = secondSkyline.concat(returnVerticesCurvedTower(-0.65, -0.3, -0.75, 0.2));
+            secondSkyline = secondSkyline.concat(returnVerticesTiltedTower(-0.2, 0, 0.1, 0.1, -0.75));
+            secondSkyline = secondSkyline.concat(returnVerticesTiltedTower(0.15, 0.45, 0.2, 0, -0.75));
+            secondSkyline = secondSkyline.concat(returnVerticesPointedTower(0.65, 0.8, -0.75, 0.2));
+            secondSkyline = secondSkyline.concat(returnVerticesTiltedTower(0.9, 1.0, 0, 0.25, -0.75));
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(secondSkyline), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, skylineColors[1][0], skylineColors[1][1],
+                skylineColors[1][2], skylineColors[1][3]);
+            
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 4, 2);
+            gl.drawArrays(gl.TRIANGLE_FAN, 6, 35);
+            gl.drawArrays(gl.TRIANGLE_FAN, 41, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 45, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 49, 5);
+            gl.drawArrays(gl.TRIANGLE_FAN, 54, 4);
+
+
+            //For use with a big line strip
+            var arrowVertices = [
+                //For the actual line of the arrow
+                -1.0, 0.8,
+                -0.9, 0.6,
+                -0.85, 0.45,
+                -0.5, 0.75,
+                -0.4, 0.5,
+                -0.1, 0.5,
+                0.1, 0.7,
+                0.2, 0.9,
+                0.6, 0.5,
+                0.9, 0.8,
+
+                //For the triangles at the end
+                //First triangle
+                0.9, 0.8,
+                0.88, 0.7,
+                0.82, 0.8
+            ];
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrowVertices), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, 0.8, 0.6, 0.8, 1.0);
+            
+            gl.drawArrays(gl.LINE_STRIP, 0, 10);
+            gl.drawArrays(gl.TRIANGLES, 10, 6);
+
+            //TODO: Add windows. I totally forgot T_T
+            //On the bright side I can do this at the end since the front buildings are meant to
+            //be more 'visible' and you can see more detail. This works. Just add them manually.
         }
     </script>
 

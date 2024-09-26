@@ -1,9 +1,9 @@
-/**Returns the vertices to draw the base of a skyline in a 
+/**Returns an array of 4 vertices to draw the base of a skyline in a 
  * triangle strip when given a height
  * 
  * @param {*} maxY Maximum height of our base; Everything above this shows
  * individuality between buildings
- * @returns skylineBaseVertices An array of vertices 
+ * @returns skylineBaseVertices An array of 4 vertices 
  * that draw the base of the skyline
  */
 function returnVerticesSkylineBase(maxY) {
@@ -17,7 +17,7 @@ function returnVerticesSkylineBase(maxY) {
 }
 
 
-/**Returns an array of vertices to a tower with a slanted roof
+/**Returns an array of 4 vertices to a tower with a slanted roof
  * to be made with a triangle fan
  * 
  * @param {*} minX X value the tower should start at
@@ -26,7 +26,7 @@ function returnVerticesSkylineBase(maxY) {
  * @param {*} Y2 Y value representing the tower's top right corner
  * @param {*} MinY The Y value the skyline base ends and the individual
  * building starts
- * @returns tiltedTower A set of vertices that draws a tilted tower when
+ * @returns tiltedTower A set of 4 vertices that draws a tilted tower when
  * used with triangle fan
  */
 function returnVerticesTiltedTower(minX, maxX, Y1, Y2, MinY) {
@@ -40,7 +40,7 @@ function returnVerticesTiltedTower(minX, maxX, Y1, Y2, MinY) {
 }
 
 
-/**Returns an array of vertices for a building with a curved roof
+/**Returns an array of 35 vertices for a building with a curved roof
  * using triangle fan.
  * 
  * @param {*} minX X value the tower should start at
@@ -48,7 +48,7 @@ function returnVerticesTiltedTower(minX, maxX, Y1, Y2, MinY) {
  * @param {*} minY The Y value the skyline base ends and the individual
  * building starts
  * @param {*} towerHeight The maximum Y value of the tower
- * @returns curvedTower A set of vertices that draws a tower with a
+ * @returns curvedTower A 35 set of vertices that draws a tower with a
  * curved roof when used with triangle fan
  */
 function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
@@ -86,7 +86,7 @@ function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
     return curvedTower;
 }
 
-/**Returns an array of vertices for a building with a triangular, middle-pointed roof
+/**Returns an array of 5 vertices for a building with a triangular, middle-pointed roof
  * using triangle fan.
  * 
  * @param {*} minX X value the tower should start at
@@ -94,7 +94,7 @@ function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
  * @param {*} minY The Y value the skyline base ends and the individual
  * building starts
  * @param {*} towerHeight The maximum Y value of the tower
- * @returns pointedTower A set of vertices that draws a tower with a pointed roof when
+ * @returns pointedTower A set of 5 vertices that draws a tower with a pointed roof when
  * used with triangle fan
  */
 function returnVerticesPointedTower(minX, maxX, minY, towerHeight) {
