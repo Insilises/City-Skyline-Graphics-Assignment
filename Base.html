@@ -72,7 +72,10 @@ golden, grey, blue, and purple color scheme.
                 [0.13, 0.24, 0.29, 1.0],
                 [0.2, 0.1, 0.25, 1.0]
             ];
-            var bgSkylineColors = [0.4, 0.27, 0.38, 1.0];
+            var skylineColors = [
+                [0.63, 0.29, 0.48, 1.0], //Is this too bright?
+                [0.4, 0.27, 0.38, 1.0]
+            ];
             //TODO: Add more colors and change value in verticalGradient() accordingly
 
             //Don't forget to change numberOfColors as colors are added.
@@ -97,27 +100,41 @@ golden, grey, blue, and purple color scheme.
             //Now for the entire back skyline
             
             /*backgroundSkylineBase has 4 vertices, tiltedTower has 4 vertices each,
-            curvedTower has 35 vertices each, 
+            curvedTower has 35 vertices each, lines will have 2
             */
             var backgroundSkylineBase = returnVerticesSkylineBase(-0.7);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkylineBase), gl.STATIC_DRAW);
-            gl.uniform4f(colorUniformLocation, bgSkylineColors[0], 
-                bgSkylineColors[1], bgSkylineColors[2], bgSkylineColors[3]);
+            gl.uniform4f(colorUniformLocation, skylineColors[0][0], 
+                skylineColors[0][1], skylineColors[0][2], skylineColors[0][3]);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
             var backgroundSkyline = returnVerticesTiltedTower(-1.0, -0.9, 0.1, 0.0, -0.7);
             backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(-0.85, -0.5, -0.1, 0.2, -0.7));
             backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(-0.4, -0.1, -0.7, 0.1));
             backgroundSkyline = backgroundSkyline.concat(returnVerticesPointedTower(0.1, 0.3, -0.7, 0.3));
+            backgroundSkyline.push(0.2, 0.3,     0.2 ,0.4); //Needle to be drawn with a line
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesTiltedTower(0.4, 0.6, 0.1, -0.2, -0.7));
+            backgroundSkyline = backgroundSkyline.concat(returnVerticesCurvedTower(0.7, 1.2, -0.7, 0.2));
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(backgroundSkyline), gl.STATIC_DRAW);
 
-            gl.uniform4f(colorUniformLocation, bgSkylineColors[0], bgSkylineColors[1],
-                bgSkylineColors[2], bgSkylineColors[3]);
+            gl.uniform4f(colorUniformLocation, skylineColors[0][0], skylineColors[0][1],
+                skylineColors[0][2], skylineColors[0][3]);
             gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 4, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 8, 35);
             gl.drawArrays(gl.TRIANGLE_FAN, 43, 5);
+            gl.drawArrays(gl.LINES, 48, 2);
+            gl.drawArrays(gl.TRIANGLE_FAN, 50, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 54, 35);
+
+
+
+            //Now for the second skyline
+            var secondSkylineBase = returnVerticesSkylineBase(-0.8);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(secondSkylineBase), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, skylineColors[1][0], skylineColors[1][1], skylineColors[1][2], skylineColors[1][3]);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
         }
     </script>
 

@@ -26,7 +26,8 @@ function returnVerticesSkylineBase(maxY) {
  * @param {*} Y2 Y value representing the tower's top right corner
  * @param {*} MinY The Y value the skyline base ends and the individual
  * building starts
- * @returns 
+ * @returns tiltedTower A set of vertices that draws a tilted tower when
+ * used with triangle fan
  */
 function returnVerticesTiltedTower(minX, maxX, Y1, Y2, MinY) {
     var tiltedTower = [
@@ -47,9 +48,11 @@ function returnVerticesTiltedTower(minX, maxX, Y1, Y2, MinY) {
  * @param {*} minY The Y value the skyline base ends and the individual
  * building starts
  * @param {*} towerHeight The maximum Y value of the tower
+ * @returns curvedTower A set of vertices that draws a tower with a
+ * curved roof when used with triangle fan
  */
 function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
-    /*We can't make this actually circular, but reading Flatland has given me an idea.
+    /*Can't make this actually circular, but reading Flatland has given me an idea.
     Create a shape that looks circular by plotting many points that follow the equation 
     for graphing a circle*/
 
@@ -64,15 +67,18 @@ function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
         minX, roofStartY
     ];
 
-    /*Need a for loop for all vertices between the two towerHeight vertices; work smarter not harder
-    Need to use: r^2 = x^2 + y^2
-    Therefore: y=sqrt(r^2 - x^2)
-    (x−a)2+(y−b)2=r2
-    Center coordinates: a = maxX-curveRadius, b = towerHeight-curveRadius
+    /*For the curve use: r**2 = x**2 + y**2
+    Therefore: y=sqrt(r**2 - x**2)
+    (x−a)**2+(y−b)**2=r2
+    (y-b)**2 = r**2 - (x-a)**2
     */
+   var a = maxX - curveRadius;
+   var b = roofStartY;
+   var xIncrement = buildingWidth/30;
+
     for (i=1; i<=30; i++) {
-        curvedTower.push(minX + (i * buildingWidth/30),
-            roofStartY + Math.sqrt((curveRadius**2) - (((minX + (i * buildingWidth/30)) - (maxX - curveRadius))**2)));
+        curvedTower.push(minX + (i * xIncrement),
+            b + Math.sqrt((curveRadius**2) - (((minX + (i * xIncrement)) - (a))**2)));
     }
 
     curvedTower.push(maxX, roofStartY, maxX, minY); //Final vertex
@@ -88,6 +94,8 @@ function returnVerticesCurvedTower(minX, maxX, minY, towerHeight) {
  * @param {*} minY The Y value the skyline base ends and the individual
  * building starts
  * @param {*} towerHeight The maximum Y value of the tower
+ * @returns pointedTower A set of vertices that draws a tower with a pointed roof when
+ * used with triangle fan
  */
 function returnVerticesPointedTower(minX, maxX, minY, towerHeight) {
     var YDiff = towerHeight - minY;
