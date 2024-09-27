@@ -84,6 +84,7 @@ golden, grey, blue, and purple color scheme.
                 [0.75, 0.64, 0.34, 1.0],
                 [0.86, 0.75, 0.81, 1.0],
                 [0.5, 0.4, 0.65, 1.0],
+                [0.4, 0.3, 0.55, 1.0],
                 [0.86, 0.66, 0.81, 1.0],
                 [0.63, 0.29, 0.48, 1.0], //Is this too bright?
                 [0.4, 0.27, 0.38, 1.0]
@@ -200,8 +201,25 @@ golden, grey, blue, and purple color scheme.
             gl.drawArrays(gl.TRIANGLE_FAN, 40, 2);
             gl.drawArrays(gl.TRIANGLE_FAN, 42, 4);
 
+            //Fifth skyline
+            var fifthSkylineBase = returnVerticesSkylineBase(-0.9);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fifthSkylineBase), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, skylineColors[4][0], skylineColors[4][1], skylineColors[4][2], skylineColors[4][3]);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-            //For use with a big line strip
+            var fifthSkyline = returnVerticesPointedTower(-0.9, -0.5, -0.9, -0.3);
+            fifthSkyline = fifthSkyline.concat(returnVerticesTiltedTower(-0.2, 0.1, -0.35, -0.4, -0.9));
+            fifthSkyline = fifthSkyline.concat(returnVerticesTiltedTower(0.25, 0.6, -0.4, -0.4, -0.9));
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fifthSkyline), gl.STATIC_DRAW);
+
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 5);
+            gl.drawArrays(gl.TRIANGLE_FAN, 5, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 9, 4);
+
+
+
+            //For use with a line strip
             var arrowVertices = [
                 //For the actual line of the arrow
                 -1.0, 0.8,
@@ -215,15 +233,14 @@ golden, grey, blue, and purple color scheme.
                 0.6, 0.5,
                 0.9, 0.8,
 
-                //For the triangles at the end
-                //First triangle
+                //For the triangle at the end
                 0.9, 0.8,
                 0.88, 0.7,
                 0.82, 0.8
             ];
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrowVertices), gl.STATIC_DRAW);
-            gl.uniform4f(colorUniformLocation, 0.8, 0.6, 0.8, 1.0);
+            gl.uniform4f(colorUniformLocation, 0.9, 0.6, 0.6, 1.0);
             
             gl.drawArrays(gl.LINE_STRIP, 0, 10);
             gl.drawArrays(gl.TRIANGLES, 10, 6);
