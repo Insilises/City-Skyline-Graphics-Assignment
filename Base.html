@@ -14,6 +14,7 @@ golden, grey, blue, and purple color scheme.
     <script type = "text/javascript" src = "initShaders.js"></script>
     <script type = "text/javascript" src = "verticalGradient.js"></script>
     <script type = "text/javascript" src = "Skyline.js"></script>
+    <script type = "text/javascript" src = "windows.js"></script>
 
     <script id="vertex-shader" type = "x-shader/x-vertex">
         attribute vec4 vPos;
@@ -146,25 +147,22 @@ golden, grey, blue, and purple color scheme.
             gl.uniform4f(colorUniformLocation, skylineColors[1][0], skylineColors[1][1], skylineColors[1][2], skylineColors[1][3]);
             gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-            var secondSkyline = returnVerticesTiltedTower(-1.0, -0.8, -0.1, 0.3, -0.75);
-            secondSkyline.push(-0.8, 0.3,   -0.8, 0.4); //Needle on top of first tilted tower
-            secondSkyline = secondSkyline.concat(returnVerticesCurvedTower(-0.65, -0.3, -0.75, 0.2));
+            var secondSkyline = returnVerticesCurvedTower(-0.65, -0.3, -0.75, 0.2);
             secondSkyline = secondSkyline.concat(returnVerticesTiltedTower(-0.2, 0, 0.1, 0.1, -0.75));
             secondSkyline = secondSkyline.concat(returnVerticesTiltedTower(0.15, 0.45, 0.2, 0, -0.75));
-            secondSkyline = secondSkyline.concat(returnVerticesPointedTower(0.65, 0.8, -0.75, 0.2));
+            secondSkyline = secondSkyline.concat(returnVerticesPointedTower(0.65, 0.8, -0.75, 0.1));
             secondSkyline = secondSkyline.concat(returnVerticesTiltedTower(0.9, 1.0, 0, 0.25, -0.75));
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(secondSkyline), gl.STATIC_DRAW);
             gl.uniform4f(colorUniformLocation, skylineColors[1][0], skylineColors[1][1],
                 skylineColors[1][2], skylineColors[1][3]);
             
-            gl.drawArrays(gl.TRIANGLE_FAN, 0, 4);
-            gl.drawArrays(gl.TRIANGLE_FAN, 4, 2);
-            gl.drawArrays(gl.TRIANGLE_FAN, 6, 35);
-            gl.drawArrays(gl.TRIANGLE_FAN, 41, 4);
-            gl.drawArrays(gl.TRIANGLE_FAN, 45, 4);
-            gl.drawArrays(gl.TRIANGLE_FAN, 49, 5);
-            gl.drawArrays(gl.TRIANGLE_FAN, 54, 4);
+            
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 35);
+            gl.drawArrays(gl.TRIANGLE_FAN, 35, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 39, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 43, 5);
+            gl.drawArrays(gl.TRIANGLE_FAN, 48, 4);
 
 
             //Third skyline
@@ -201,6 +199,41 @@ golden, grey, blue, and purple color scheme.
             gl.drawArrays(gl.TRIANGLE_FAN, 40, 2);
             gl.drawArrays(gl.TRIANGLE_FAN, 42, 4);
 
+            /*Adding windows on fourth skyline; I wanted to put them at the end, but
+            after the buildings is best since we can just draw the windows, and the 
+            fifth skyline can cover them if needed. It's just easier to write.
+            */
+            
+            //Fourth skyline curved tower windows
+            var windowVertices = getVerticesDiamondWindow(-0.5, -0.45, -0.5, -0.4);
+            windowVertices = windowVertices.concat(getVerticesDiamondWindow(-0.5, -0.45, -0.7, -0.6));
+            windowVertices = windowVertices.concat(getVerticesDiamondWindow(-0.6, -0.55, -0.5, -0.4));
+
+            //Fourth skyline pointed tower windows
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(-0.25, -0.2, -0.4, -0.45));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(-0.25, -0.2, -0.5, -0.55));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(-0.25, -0.2, -0.6, -0.65));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(-0.25, -0.2, -0.7, -0.75));
+            //Starting on other side of building
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0, 0.125, -0.4, -0.45));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0, 0.125, -0.5, -0.55));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0, 0.125, -0.6, -0.65));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0, 0.125, -0.7, -0.75));
+
+            //Fourth skyline tilted tower windows
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.45, 0.55, -0.35, -0.45));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.6, 0.7, -0.35, -0.45));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.725, 0.775, -0.35, -0.45));
+
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(windowVertices), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, 0.91, 0.8, 0.51, 1.0);
+
+            for (i=0; i<14; i++)
+                gl.drawArrays(gl.TRIANGLE_FAN, 0 + (i*4), 4);
+
+
+
             //Fifth skyline
             var fifthSkylineBase = returnVerticesSkylineBase(-0.9);
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fifthSkylineBase), gl.STATIC_DRAW);
@@ -209,7 +242,7 @@ golden, grey, blue, and purple color scheme.
 
             var fifthSkyline = returnVerticesPointedTower(-0.9, -0.5, -0.9, -0.3);
             fifthSkyline = fifthSkyline.concat(returnVerticesTiltedTower(-0.2, 0.1, -0.35, -0.4, -0.9));
-            fifthSkyline = fifthSkyline.concat(returnVerticesTiltedTower(0.25, 0.6, -0.4, -0.4, -0.9));
+            fifthSkyline = fifthSkyline.concat(returnVerticesTiltedTower(0.25, 0.95, -0.4, -0.4, -0.9));
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fifthSkyline), gl.STATIC_DRAW);
 
@@ -217,7 +250,32 @@ golden, grey, blue, and purple color scheme.
             gl.drawArrays(gl.TRIANGLE_FAN, 5, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 9, 4);
 
+            
+            //Fifth skyline windows
+            //Fifth skyline pointed tower window
+            var windowVertices = getVerticesRectangleWindow(-0.8, -0.6, -0.8, -0.6);
 
+            //Fifth skyline tilted tower windows
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(-0.15, 0.05, -0.55, -0.45));
+            windowVertices = windowVertices.concat(getVerticesDiamondWindow(-0.15, -0.1, -0.65, -0.75));
+            windowVertices = windowVertices.concat(getVerticesDiamondWindow(0, 0.05, -0.65, -0.75));
+
+            //Fifth skyline tilted tower windows
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.3, 0.5, -0.6, -0.5));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.6, 0.8, -0.6, -0.5));
+            windowVertices = windowVertices.concat(getVerticesDiamondWindow(0.85, 0.9, -0.6, -0.5));
+
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.3, 0.5, -0.7, -0.8));
+            windowVertices = windowVertices.concat(getVerticesRectangleWindow(0.6, 0.8, -0.7, -0.8));
+            windowVertices = windowVertices.concat(getVerticesDiamondWindow(0.85, 0.9, -0.7, -0.8));
+
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(windowVertices), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, 0.91, 0.88, 0.66, 1.0);
+
+            for (i=0; i<10; i++)
+                gl.drawArrays(gl.TRIANGLE_FAN, 0 + (i*4), 4);
+            
 
             //For use with a line strip
             var arrowVertices = [
@@ -243,7 +301,7 @@ golden, grey, blue, and purple color scheme.
             gl.uniform4f(colorUniformLocation, 0.9, 0.6, 0.6, 1.0);
             
             gl.drawArrays(gl.LINE_STRIP, 0, 10);
-            gl.drawArrays(gl.TRIANGLES, 10, 6);
+            gl.drawArrays(gl.TRIANGLES, 10, 3);
 
             //TODO: Add windows. I totally forgot T_T
             //On the bright side I can do this at the end since the front buildings are meant to
