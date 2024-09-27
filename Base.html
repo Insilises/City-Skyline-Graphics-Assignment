@@ -58,32 +58,40 @@ golden, grey, blue, and purple color scheme.
             var buffer = gl.createBuffer();
             gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 
-            //We're starting with a gradient, going from gold to dark blue to purple.
+            //We're starting with a gradient, going from gold to pink to purple
             var gradientColors = [
-                [0.99, 0.94, 0.68, 1.0],
+                [0.99, 0.94, 0.68, 1.0], //Golds start
                 [0.91, 0.88, 0.66, 1.0], 
                 [0.91, 0.84, 0.54, 1.0],
                 [0.89, 0.73, .45, 1.0],
                 [0.8, 0.59, 0.4, 1.0],
-                [0.74, 0.58, 0.4, 1.0],
-                [0.56, 0.52, 0.5, 1.0],
-                [0.27, 0.27, 0.3, 1.0],
-                [0.3, 0.2, 0.35, 1.0],
-                [0.2, 0.1, 0.25, 1.0],
-                [0.2, 0.1, 0.3, 1.0]
+                [0.74, 0.58, 0.4, 1.0], //Last gold
+                [0.86, 0.75, 0.81, 1.0],//Pink
+                [0.86, 0.66, 0.81, 1.0],//Pink
+                [0.5, 0.4, 0.65, 1.0], //Purple
+                [0.4, 0.3, 0.55, 1.0],
+                [0.32, 0.1, 0.32, 1.0],
+                //[0.56, 0.52, 0.5, 1.0],
+                //[0.27, 0.27, 0.3, 1.0],
+                //[0.3, 0.2, 0.35, 1.0],
+                [0.2, 0.1, 0.3, 1.0],
+                [0.2, 0.1, 0.25, 1.0]
                 //[0.13, 0.24, 0.29, 1.0]
             ];
 
             var skylineColors = [
                 [0.85, 0.74, 0.44, 1.0],
                 [0.75, 0.64, 0.34, 1.0],
+                [0.86, 0.75, 0.81, 1.0],
+                [0.5, 0.4, 0.65, 1.0],
+                [0.86, 0.66, 0.81, 1.0],
                 [0.63, 0.29, 0.48, 1.0], //Is this too bright?
                 [0.4, 0.27, 0.38, 1.0]
             ];
             //TODO: Add more colors and change value in verticalGradient() accordingly
 
             //Don't forget to change numberOfColors as colors are added.
-            var vertices = verticalGradient(-1.0, 1.0, -0.7, 1.0, 10);
+            var vertices = verticalGradient(-1.0, 1.0, -0.7, 1.0, 12);
 
             gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
 
@@ -156,6 +164,41 @@ golden, grey, blue, and purple color scheme.
             gl.drawArrays(gl.TRIANGLE_FAN, 45, 4);
             gl.drawArrays(gl.TRIANGLE_FAN, 49, 5);
             gl.drawArrays(gl.TRIANGLE_FAN, 54, 4);
+
+
+            //Third skyline
+            var thirdSkylineBase = returnVerticesSkylineBase(-0.8);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(thirdSkylineBase), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, skylineColors[2][0], skylineColors[2][1], skylineColors[2][2], skylineColors[2][3]);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            var thirdSkyline = returnVerticesPointedTower(-1.1, -0.7, -0.8, 0);
+            thirdSkyline = thirdSkyline.concat(returnVerticesTiltedTower(-0.55, -0.25, 0, -0.2, -0.8));
+            thirdSkyline = thirdSkyline.concat(returnVerticesCurvedTower(0.3, 0.6, -0.8, -0.1));
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(thirdSkyline), gl.STATIC_DRAW);
+
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 5);
+            gl.drawArrays(gl.TRIANGLE_FAN, 5, 4);
+            gl.drawArrays(gl.TRIANGLE_FAN, 9, 35);
+
+            //Fourth skyline
+            var fourthSkylineBase = returnVerticesSkylineBase(-0.85);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fourthSkylineBase), gl.STATIC_DRAW);
+            gl.uniform4f(colorUniformLocation, skylineColors[3][0], skylineColors[3][1], skylineColors[3][2], skylineColors[3][3]);
+            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+            var fourthSkyline = returnVerticesCurvedTower(-0.8, -0.4, -0.85, -0.2);
+            fourthSkyline = fourthSkyline.concat(returnVerticesPointedTower(-0.3, 0.15, -0.85, -0.1));
+            fourthSkyline.push(-0.23, -0.2,     -0.23, 0);
+            fourthSkyline = fourthSkyline.concat(returnVerticesTiltedTower(0.4, 0.8, -0.3, -0.2, -0.85));
+
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(fourthSkyline), gl.STATIC_DRAW);
+
+            gl.drawArrays(gl.TRIANGLE_FAN, 0, 35);
+            gl.drawArrays(gl.TRIANGLE_FAN, 35, 5);
+            gl.drawArrays(gl.TRIANGLE_FAN, 40, 2);
+            gl.drawArrays(gl.TRIANGLE_FAN, 42, 4);
 
 
             //For use with a big line strip
